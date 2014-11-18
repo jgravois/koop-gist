@@ -10,23 +10,27 @@ Source providers such as `koop-github` require that you first install koop:
 ```bash
 git clone git@github.com:Esri/koop.git
 cd koop
-npm install 
+npm install
 # copy and edit the config file
 cp config/default.json.example config/default.json
 ```
 Note that you'll need to have setup a PostGIS database and provide the connection string in the koop config.json.
 
-## Now install `koop-gist`. 
+## Now install `koop-gist`.
 
 ```bash
 npm install https://github.com/chelm/koop-gist/tarball/master
 
-# copy the gist config file and add your github token 
-cp config/config.js.example config/config.js
-
 # start the koop server
-node server.js 
+node server.js
 ```
+
+Github puts a limit on how many anonymous requests can be made to access repositories and Gists.  If you'd like to make sure koop is not affected by this, create a [token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) and supply it as an environment variable when you launch the app.
+
+```bash
+# start the koop server
+GITHUBTOKEN=xxx node server.js
+ ```
 
 ## Usage
 

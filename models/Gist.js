@@ -1,11 +1,13 @@
 var Geohub = require('geohub'),
   BaseModel = require('koop-server/lib/BaseModel.js');
 
-var config = {};
-try {
-  config = require('./config');
-} catch(e){
-  console.warn('No config file found for koop-gist. Please copy the models/config.js.example to models/config.js.');
+var token;
+if (process.env.GITHUBTOKEN){
+  token = process.env.GITHUBTOKEN;
+}
+else {
+  token = null;
+  console.warn('No GITHUBTOKEN environment variable specified when launching app');
 }
 
 function Gist( koop ){
@@ -19,14 +21,14 @@ function Gist( koop ){
     var type = 'Gist';
     koop.Cache.get( type, id, options, function(err, entry ){
       if ( err ){
-        Geohub.gist( { id: id, token: config.token }, function( err, geojson ){
+        Geohub.gist( { id: id, token: token }, function( err, geojson ){
           if (err){
             callback(err, null);
           } else {
             if ( !geojson.length ){
               geojson = [ geojson ];
             }
-      
+
             var _totalLayer = geojson.length,
               finalJson = [];
             // local method to collect layers and send them all
@@ -36,12 +38,12 @@ function Gist( koop ){
                 callback(null, finalJson);
               }
             };
-  
+
             geojson.forEach(function(layer, i){
               koop.Cache.insert( type, id, layer, i, function( err, success){
                 if ( success ) {
                   _send(layer);
-                } 
+                }
               });
             });
           }
@@ -51,7 +53,7 @@ function Gist( koop ){
       }
     });
   };
-  
+
   // compares the updated_at timestamp on the cached data and the hosted data
   // this method name is special reserved name that will get called by the cache model
   gist.checkCache = function checkCache(id, data, options, callback){
@@ -61,7 +63,7 @@ function Gist( koop ){
         callback(null, false);
       } else {
         Geohub.gist( { id: id, token: config.token }, function( err, geojson ){
-          callback(null, geojson);  
+          callback(null, geojson);
         });
       }
     });
