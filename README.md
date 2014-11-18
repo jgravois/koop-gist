@@ -29,7 +29,7 @@ Github puts a limit on how many anonymous requests can be made to access reposit
 
 ```bash
 # start the koop server
-GITHUBTOKEN=xxx node server.js
+KOOP_GITHUB_TOKEN=xxx node server.js
  ```
 
 ## Usage

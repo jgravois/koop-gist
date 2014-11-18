@@ -2,12 +2,12 @@ var Geohub = require('geohub'),
   BaseModel = require('koop-server/lib/BaseModel.js');
 
 var token;
-if (process.env.GITHUBTOKEN){
-  token = process.env.GITHUBTOKEN;
+if (process.env.KOOP_GITHUB_TOKEN){
+  token = process.env.KOOP_GITHUB_TOKEN;
 }
 else {
   token = null;
-  console.warn('No GITHUBTOKEN environment variable specified when launching app');
+  console.warn('No KOOP_GITHUB_TOKEN environment variable specified when launching app');
 }
 
 function Gist( koop ){
